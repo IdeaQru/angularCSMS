@@ -1,0 +1,32 @@
+.header-container {
+  text-align: center;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  background-color: #0ba766; /* Green color */
+  color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.container {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  font-weight: bold;
+  background-color: #0ba766; /* Green color for the card header */
+}
+
+.attachment label.btn-success {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.form-check-inline {
+  margin-right: 1rem;
+}

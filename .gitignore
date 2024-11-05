@@ -1,0 +1,13 @@
+# Ignore Angular Cache
+.angular/cache/
+
+# Ignore Node modules
+node_modules/
+
+# Ignore build output (docs folder)
+docs/
+
+# Ignore any other cache or temporary files
+*.log
+*.tmp
+*.pack

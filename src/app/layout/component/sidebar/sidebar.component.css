@@ -1,0 +1,90 @@
+
+
+.sidebar.minimized {
+  width: 80px; /* Lebar sidebar yang lebih kecil saat diminimalkan */
+  padding-top: 1rem; /* Kurangi padding atas saat diminimalkan */
+}
+
+/* Tombol Minimize */
+.minimize-btn {
+  background: #004d40;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  top: 15px; /* Tetap di atas sidebar */
+  right: 30px; /* Geser keluar sedikit agar terlihat */
+  font-size: 1.5rem;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1100;
+  transition: right 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.minimize-btn:hover {
+  background:  #299225;
+}
+
+.sidebar.minimized .minimize-btn {
+  top: 15px; /* Tombol minimize tetap di atas saat sidebar diminimalkan */
+  right: 20px; /* Geser tombol keluar agar selalu terlihat */
+}
+
+/* Header Sidebar */
+.sidebar-header {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 2rem; /* Tambahkan margin agar tidak bertabrakan dengan tombol minimize */
+  transition: opacity 0.3s ease-in-out;
+}
+
+.sidebar.minimized .sidebar-header {
+  opacity: 0; /* Sembunyikan header saat sidebar diminimalkan */
+}
+
+/* Navigasi di Sidebar */
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0; /* Berikan jarak dari atas agar tidak bertumpuk dengan tombol */
+}
+
+.nav-item {
+  margin-bottom: 1rem;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease-in-out, border-left 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.sidebar.minimized .nav-link {
+  justify-content: center;
+  padding: 0.75rem 0.5rem;
+}
+
+.nav-link:hover {
+  background-color: #004d40; /* Warna lebih gelap untuk hover */
+  border-left: 4px solid #00ff00;
+  color: #ffea00;
+}
+
+.nav-link i {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.sidebar.minimized .nav-link i {
+  margin-right: 0; /* Hilangkan margin pada ikon saat sidebar diminimalkan */
+}

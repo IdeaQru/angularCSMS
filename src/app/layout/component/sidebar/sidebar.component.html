@@ -1,0 +1,70 @@
+<aside class="sidebar" [class.minimized]="isMinimized">
+  <!-- Tombol Minimize -->
+  <button class="minimize-btn" (click)="toggleMinimize()">
+    <i class="fas" [class.fa-arrow-left]="!isMinimized" [class.fa-arrow-right]="isMinimized"></i>
+  </button>
+
+  <!-- Sidebar Header -->
+  <div class="sidebar-header" *ngIf="!isMinimized">
+    CSMS Menu
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <ul class="nav-list sidebar-nav">
+    <li class="nav-item">
+      <a routerLink="/profile" class="nav-link">
+        <i class="fas fa-user"></i>
+        <span *ngIf="!isMinimized">Profile</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="/dashboard" class="nav-link">
+        <i class="fas fa-tachometer-alt"></i>
+        <span *ngIf="!isMinimized">Dashboard</span>
+      </a>
+    </li>
+    <!-- Penilaian Dropdown -->
+    <li class="nav-item">
+      <a href="#penilaianMenu" class="nav-link dropdown-toggle" data-bs-toggle="collapse" [attr.aria-expanded]="!isMinimized" aria-controls="penilaianMenu">
+        <i class="fas fa-tasks"></i>
+        <span *ngIf="!isMinimized">Tester</span>
+      </a>
+      <ul id="penilaianMenu" class="collapse" [ngClass]="{'show': !isMinimized}">
+        <li class="nav-item">
+          <a routerLink="/tester/evaluation" class="nav-link">
+            <i class="fas fa-file-alt"></i>
+            <span *ngIf="!isMinimized">Evaluation</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/tester/report" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            <span *ngIf="!isMinimized">Report</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Contractor Dropdown -->
+    <li class="nav-item">
+      <a href="#contractorMenu" class="nav-link dropdown-toggle" data-bs-toggle="collapse" [attr.aria-expanded]="!isMinimized" aria-controls="contractorMenu">
+        <i class="fas fa-briefcase"></i>
+        <span *ngIf="!isMinimized">Contractor</span>
+      </a>
+      <ul id="contractorMenu" class="collapse" [ngClass]="{'show': !isMinimized}">
+        <li class="nav-item">
+          <a routerLink="/contractor/prequalification" class="nav-link">
+            <i class="fas fa-file-alt"></i>
+            <span *ngIf="!isMinimized">Prequalification</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/contractor/certification" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            <span *ngIf="!isMinimized">Certification</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</aside>

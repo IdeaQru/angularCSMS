@@ -1,0 +1,70 @@
+<div class="container mt-4 shadow-lg rounded p-4" style="background-color: #ffffff;">
+  <!-- Header Report Page -->
+  <div class="header-container text-center p-4 mb-4 rounded shadow-sm" style="background-color: #0ba766; color: #ffffff;">
+    <i class="fas fa-chart-line me-2" style="font-size: 2.5rem;"></i>
+    <h2 class="d-inline-block mb-0" style="font-weight: bold; letter-spacing: 1px;">Laporan CSMS</h2>
+  </div>
+
+  <!-- Dropdown untuk memilih perusahaan -->
+  <div class="card border-0 shadow-sm p-4 mb-4">
+    <h4 class="fw-bold text-secondary mb-3">Pilih Perusahaan</h4>
+    <div class="mb-4">
+      <label for="companySelect" class="form-label">Nama Perusahaan:</label>
+      <select id="companySelect" class="form-select form-select-lg" [(ngModel)]="selectedCompany" (change)="onCompanyChange()">
+        <option value="" disabled selected>-- Pilih Perusahaan --</option>
+        <option *ngFor="let company of companies" [value]="company.id">{{ company.name }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Menampilkan detail perusahaan yang dipilih -->
+  <div *ngIf="selectedCompanyDetails" class="card border-0 shadow-sm p-4 mt-4">
+    <div class="d-flex align-items-center mb-4">
+      <div class="me-3">
+        <i class="fas fa-industry fa-3x text-primary"></i>
+      </div>
+      <div>
+        <h4 class="fw-bold mb-1 text-success">{{ selectedCompanyDetails.name }}</h4>
+        <p class="mb-0 text-muted">Detail laporan evaluasi keselamatan dan kesehatan kerja perusahaan.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Skor Evaluasi -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-star fa-2x text-warning mb-3"></i>
+            <h5 class="card-title fw-bold">Skor Evaluasi</h5>
+            <p class="card-text fs-4 fw-bold text-primary">{{ selectedCompanyDetails.score }}/100</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ringkasan Evaluasi -->
+      <div class="col-md-8 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h5 class="card-title fw-bold text-info">
+              <i class="fas fa-clipboard-list me-2"></i> Ringkasan Evaluasi
+            </h5>
+            <p class="card-text">{{ selectedCompanyDetails.reportSummary }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tombol Aksi -->
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <button type="button" class="btn btn-outline-success btn-lg">
+        <i class="fas fa-download me-2"></i> Download Laporan {{ selectedCompanyDetails.name }}
+      </button>
+      <button type="button" class="btn btn-outline-primary btn-lg">
+        <i class="fas fa-chart-bar me-2"></i> Hasil Evaluasi Lengkap
+      </button>
+      <button type="button" class="btn btn-outline-secondary btn-lg">
+        <i class="fas fa-certificate me-2"></i> Download Sertifikat
+      </button>
+    </div>
+  </div>
+</div>
