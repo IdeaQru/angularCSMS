@@ -1,0 +1,68 @@
+<div class="user-management">
+  <h2>User Management</h2>
+  <button class="btn btn-success mb-3" (click)="startAdd()" *ngIf="!showForm">+ Tambah User</button>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+  <!-- Reset Password Form -->
+  <div *ngIf="resetUser" class="reset-password-container">
+    <h5>Reset Password untuk {{ resetUser.username }}</h5>
+    <form (ngSubmit)="resetPassword()">
+      <div class="mb-2">
+        <label>Password Baru</label>
+        <input class="form-control" [(ngModel)]="resetPasswordValue" name="resetPasswordValue" required
+          type="password" />
+      </div>
+      <button class="btn btn-primary me-2" type="submit">Reset</button>
+      <button class="btn btn-secondary" type="button" (click)="cancelResetPassword()">Batal</button>
+    </form>
+  </div>
+
+  <!-- Form tambah/edit user hanya muncul jika showForm true -->
+  <div *ngIf="showForm" class="user-form-container">
+    <form (ngSubmit)="saveUser()" class="mb-4">
+      <div class="mb-2">
+        <label>Username</label>
+        <input class="form-control" [(ngModel)]="formUser.username" name="username" required />
+      </div>
+
+      <div class="mb-2" *ngIf="!isEdit">
+        <label>Password</label>
+        <input class="form-control" [(ngModel)]="formUser.password" name="password" required type="password" />
+      </div>
+      <div class="mb-2">
+        <label>Role</label>
+        <select class="form-control" [(ngModel)]="formUser.role" name="role" required>
+          <option value="admin">Admin</option>
+          <option value="auditor">Auditor</option>
+          <option value="perusahaan">Auditee / Perusahaan</option>
+        </select>
+      </div>
+      <button class="btn btn-primary me-2" type="submit">{{ isEdit ? 'Update' : 'Tambah' }}</button>
+      <button class="btn btn-secondary" type="button" (click)="cancelForm()">Batal</button>
+    </form>
+  </div>
+
+  <!-- Tabel user -->
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Role</th>
+        <th style="width: 120px;">Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.username }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-1" (click)="startEdit(user)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteUser(user._id)">Hapus</button>
+          <button class="btn btn-sm btn-secondary" (click)="openResetPassword(user)">Reset Password</button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

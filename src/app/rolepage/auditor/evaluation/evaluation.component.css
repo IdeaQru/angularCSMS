@@ -1,0 +1,200 @@
+/* ==============================================
+   EVALUATION COMPONENT STYLESHEET
+   Tema: Green & Gold Professional
+   ============================================== */
+
+/* -- 1. Kontrol Form Umum (Dropdown & Textarea) -- */
+/* Aturan untuk membuat header tabel menjadi hijau */
+
+.table thead.table-light th {
+  background-color: #0ba766; /* Warna hijau utama Anda */
+  color: #ffffff;             /* Teks putih agar kontras dan mudah dibaca */
+  font-weight: 600;            /* Sedikit tebalkan font untuk penekanan */
+  letter-spacing: 0.5px;       /* Jarak antar huruf agar lebih rapi */
+  border-bottom: none;         /* Hilangkan garis border bawah default jika ada */
+}
+
+.form-label.fw-bold {
+  color: #333;
+  letter-spacing: 0.5px;
+}
+
+.form-select,
+textarea.form-control {
+  border-radius: 8px;
+  border: 1.5px solid #dcdcdc;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.98rem;
+  background-color: #fdfdfd;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-select:focus,
+textarea.form-control:focus {
+  border-color: #0ba766; /* Warna utama saat fokus */
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(11, 167, 102, 0.15); /* Efek glow hijau */
+}
+
+/* -- 2. Tabel Evaluasi Utama -- */
+.table {
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden; /* Penting untuk border-radius */
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.07);
+}
+
+.table th, 
+.table td {
+  padding: 1rem 1.25rem;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.table thead.table-light th {
+  background-color: #0ba766;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom: none;
+}
+
+/* Styling untuk input di dalam tabel */
+.table td .form-label.small {
+  margin-bottom: 0.3rem;
+  color: #0ba766; /* Warna hijau untuk label di dalam form */
+  font-size: 0.85em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* -- 3. Badges & Links -- */
+.badge {
+  padding: 0.45em 0.9em;
+  border-radius: 1em;
+  font-weight: 600;
+  font-size: 0.85em;
+  letter-spacing: 0.3px;
+  border: 1px solid transparent;
+}
+
+/* Warna badge yang lebih lembut dan profesional */
+.bg-success { background-color: #d1fae5 !important; color: #065f46 !important; border-color: #a7f3d0; }
+.bg-warning { background-color: #fef3c7 !important; color: #92400e !important; border-color: #fde68a; }
+.bg-danger  { background-color: #fee2e2 !important; color: #991b1b !important; border-color: #fecaca; }
+.bg-dark    { background-color: #e5e7eb !important; color: #374151 !important; border-color: #d1d5db; } /* Untuk klasifikasi */
+.bg-primary { background-color: #e0f2fe !important; color: #075985 !important; border-color: #bae6fd; } /* Untuk Pilihan Vendor */
+
+.btn-outline-info {
+  border-color: #0ba766;
+  color: #0ba766;
+  font-weight: 600;
+}
+.btn-outline-info:hover {
+  background-color: #0ba766;
+  color: #fff;
+}
+
+
+/* -- 4. Tombol Aksi (Glow & Cancel) -- */
+.btn-glow,
+.btn-cancel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* Jarak antara ikon dan teks */
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Tombol Aksi Utama (Edit, Simpan) */
+.btn-glow {
+  background: linear-gradient(95deg, #0ba766 0%, #0a8f58 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(11, 167, 102, 0.25);
+}
+
+.btn-glow:hover {
+  background: linear-gradient(95deg, #0ba766 0%, #ffea00 150%);
+  box-shadow: 0 0 20px rgba(255, 234, 0, 0.5); /* Efek glow kuning saat hover */
+  transform: translateY(-2px);
+}
+
+.btn-glow:disabled {
+  background: #a5d3b6;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Tombol Batal */
+.btn-cancel {
+  background: #f1f1f1;
+  color: #555;
+}
+
+.btn-cancel:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+
+/* -- 5. Desain Responsif untuk Mobile -- */
+@media (max-width: 992px) {
+  .table {
+    display: block;
+    width: 100%;
+    box-shadow: none;
+    background-color: transparent;
+  }
+  .table thead, .table tbody, .table th, .table td, .table tr {
+    display: block;
+  }
+  .table thead {
+    display: none; /* Sembunyikan header tabel, kita gunakan label di td */
+  }
+  .table tr {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  }
+  .table td {
+    border: none;
+    position: relative;
+    padding-left: 45%; /* Ruang untuk label */
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Ratakan konten ke kanan */
+    min-height: 48px; /* Agar baris tidak terlalu rapat */
+  }
+  .table td::before {
+    content: attr(data-label); /* Menggunakan data-label sebagai judul kolom */
+    position: absolute;
+    left: 1rem;
+    width: 40%;
+    text-align: left;
+    font-weight: 700;
+    color: #0ba766;
+  }
+  .table td .form-select,
+  .table td .form-control {
+    width: 100%; /* Buat input mengisi ruang yang tersedia */
+  }
+  .table td .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,140 @@
+<!-- Tombol Download tetap di atas -->
+<div>
+  <button 
+    class="btn btn-glow mb-3" 
+    (click)="generatePDF()" 
+    [disabled]="!isViewReady || isGenerating"
+    [class.disabled]="!isViewReady || isGenerating">
+    
+    <span *ngIf="isGenerating" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <i *ngIf="!isGenerating" class="bi bi-file-earmark-pdf"></i>
+    
+    <span *ngIf="!isViewReady">Menyiapkan...</span>
+    <span *ngIf="isViewReady && !isGenerating">Download PDF</span>
+    <span *ngIf="isViewReady && isGenerating">Membuat PDF...</span>
+  </button>
+</div>
+
+<!-- Kontainer utama untuk semua halaman yang akan di-render menjadi PDF -->
+<div #pdfContent class="pdf-container">
+
+  <!-- HALAMAN 1: SAMPUL (COVER) -->
+  <div class="pdf-page">
+    <div class="cover-page-content">
+      <img src="assets/icon_corporate.png" alt="Logo" class="logo">
+      <h1 class="main-title">Laporan Sementara Audit</h1>
+      <h3 class="company-name">{{ laporan.Nama_Perusahaan }}</h3>
+      
+      <div class="audit-info">
+        <p><b>Pelaksanaan Audit:</b> {{ laporan.Pelaksanaan_Audit | date:'dd MMMM yyyy' }}</p>
+        <p><b>Auditor:</b> {{ laporan.Auditor?.Nama || laporan.Auditor }}</p>
+      </div>
+    </div>
+    <div class="page-footer">
+      Generated on: {{ today | date:'dd MMMM yyyy' }}
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- HALAMAN 2: DETAIL LAPORAN -->
+  <div class="pdf-page">
+    <header class="page-header">
+      <img src="assets/icon_corporate.png" alt="Logo">
+      <div class="report-title">
+        Laporan Sementara Audit <br> {{ laporan.Nama_Perusahaan }}
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="card-header">Identitas Audit</div>
+        <div class="card-body">
+          <p class="info-item"><b>Perusahaan</b>: {{ laporan.Nama_Perusahaan }}</p>
+          <p class="info-item"><b>Pelaksanaan Audit</b>: {{ laporan.Pelaksanaan_Audit | date:'dd MMMM yyyy' }}</p>
+          <p class="info-item"><b>Auditor</b>: {{ laporan.Auditor?.Nama || laporan.Auditor }}</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">Lingkup & Tujuan Audit</div>
+        <div class="card-body">
+          <p><b>Lingkup Audit:</b></p>
+          <p>{{ laporan.Lingkup_Audit }}</p>
+          <br>
+          <p><b>Tujuan Audit:</b></p>
+          <p>{{ laporan.Tujuan_Audit }}</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">Ringkasan Hasil</div>
+        <div class="card-body">
+          <p class="info-item"><b>Tingkat Pencapaian</b>: {{ laporan.Tingkat_Pencapaian }}</p>
+          <p><b>Ringkasan:</b></p>
+          <p>{{ laporan.Ringkasan_Hasil }}</p>
+        </div>
+      </section>
+
+      <div class="signature-section">
+        <div>Auditor,</div>
+        <div class="signature-line">{{ laporan.Auditor?.Nama || laporan.Auditor }}</div>
+      </div>
+    </main>
+
+    <footer class="page-footer">
+      Halaman 2
+    </footer>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- HALAMAN 3: LAMPIRAN DAFTAR TEMUAN -->
+  <div class="pdf-page">
+    <header class="page-header">
+      <img src="assets/icon_corporate.png" alt="Logo">
+      <div class="report-title">
+        Lampiran: Daftar Temuan Audit <br> {{ laporan.Nama_Perusahaan }}
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="card-header">Daftar Temuan Audit</div>
+        <div class="card-body" style="padding: 0;"> <!-- Padding 0 agar tabel menempel sempurna -->
+          <table class="professional-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Kriteria</th>
+                <th>Deskripsi Temuan</th>
+                <th>Tanggal</th>
+                <th>Status TL</th>
+                <th>Tindak Lanjut</th>
+                <th>Klasifikasi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let t of laporan.Daftar_Temuan; let i = index">
+                <td style="text-align: center;">{{ i + 1 }}</td>
+                <td>{{ t.ID_Kriteria?.Kode || t.ID_Kriteria }}</td>
+                <td>{{ t.Deskripsi }}</td>
+                <td>{{ t.Tanggal_Temuan | date:'dd MMM yyyy' }}</td>
+                <td>{{ t.Status_TL }}</td>
+                <td>{{ t.Tindak_Lanjut }}</td>
+                <td>{{ t.Klasifikasi_Temuan }}</td>
+              </tr>
+              <tr *ngIf="!laporan.Daftar_Temuan || laporan.Daftar_Temuan.length === 0">
+                <td colspan="6" style="text-align: center; padding: 20px;">Tidak ada temuan yang dilaporkan.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      Halaman 3
+    </footer>
+  </div>
+</div>

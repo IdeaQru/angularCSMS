@@ -1,0 +1,48 @@
+<div class="auth-wrapper">
+    <!-- Form di kiri -->
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-user-plus"></i>
+            <h2>Register</h2>
+        </div>
+        <form (ngSubmit)="onSubmit()">
+            <!-- Input untuk Nama Lengkap -->
+           
+            
+            <!-- Input untuk Username -->
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" [(ngModel)]="username" name="username" required autocomplete="username" />
+            </div>
+
+            <!-- Input untuk Password -->
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" [(ngModel)]="password" name="password" required autocomplete="new-password" />
+            </div>
+
+            <!-- Input untuk Konfirmasi Password -->
+            <div class="form-group">
+                <label>Konfirmasi Password</label>
+                <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required />
+            </div>
+
+            <!-- Pesan feedback untuk error atau sukses -->
+            <div *ngIf="error" class="error-msg">{{ error }}</div>
+            <div *ngIf="success" class="success-msg">{{ success }}</div>
+
+       
+        </form>
+        <p class="auth-switch">
+            Sudah punya akun? <a routerLink="/auth/login">Login di sini</a>
+        </p>
+    </div>
+    
+    <!-- Kolom kanan: judul di atas gambar -->
+    <div class="auth-image-container">
+        <div class="auth-image right" @slideInRight>
+            <div class="image-title">Audit Web Apps</div>
+            <img src="assets/ppns-ship.jpg" alt="PPNS Ship" class="main-image" />
+        </div>
+    </div>
+</div>

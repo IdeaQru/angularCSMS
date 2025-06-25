@@ -1,0 +1,18 @@
+<div class="tabs-container">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'laporan'" (click)="activeTab = 'laporan'">Laporan Sementara</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'ncr'" (click)="activeTab = 'ncr'">NCR Form</a>
+    </li>
+  </ul>
+  <div class="tab-content" style="margin-top: 2em;">
+    <div *ngIf="activeTab === 'laporan'">
+      <app-laporan-sementara></app-laporan-sementara>
+    </div>
+    <div *ngIf="activeTab === 'ncr'">
+      <app-ncr-form></app-ncr-form>
+    </div>
+  </div>
+</div>

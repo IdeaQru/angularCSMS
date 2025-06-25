@@ -1,0 +1,58 @@
+<!-- <div class="content-section">
+  <ng-container *ngIf="loading">
+    <div class="loading-spinner">
+      <span class="spinner-border spinner-border-sm text-success"></span>
+      Memuat laporan sementara...
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && laporan">
+    <h2>Laporan Sementara Audit</h2>
+    <div class="info-group">
+      <div><b>Nama Perusahaan:</b> {{ laporan.Nama_Perusahaan }}</div>
+      <div><b>Pelaksanaan Audit:</b> {{ laporan.Pelaksanaan_Audit | date:'dd MMMM yyyy' }}</div>
+      <div><b>Lingkup Audit:</b> {{ laporan.Lingkup_Audit }}</div>
+      <div><b>Tujuan Audit:</b> {{ laporan.Tujuan_Audit }}</div>
+      <div><b>Tingkat Pencapaian:</b> {{ laporan.Tingkat_Pencapaian }}</div>
+      <div><b>Ringkasan Hasil:</b> {{ laporan.Ringkasan_Hasil }}</div>
+    </div>
+
+    <h3>Daftar Temuan Audit</h3>
+    <table class="table" *ngIf="laporan.Daftar_Temuan && laporan.Daftar_Temuan.length > 0; else noTemuan">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Kriteria</th>
+          <th>Deskripsi Temuan</th>
+          <th>Tanggal Temuan</th>
+          <th>Status TL</th>
+          <th>Tindak Lanjut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of laporan.Daftar_Temuan; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ t.ID_Kriteria?.Kode || t.ID_Kriteria }}</td>
+          <td>{{ t.Deskripsi }}</td>
+          <td>{{ t.Tanggal_Temuan | date:'dd MMMM yyyy' }}</td>
+          <td>{{ t.Status_TL }}</td>
+          <td>{{ t.Tindak_Lanjut }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noTemuan>
+      <div class="alert alert-info" style="margin-top:1em;">
+        Tidak ada temuan audit pada laporan ini.
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && !laporan">
+    <div class="alert alert-warning">
+      Laporan sementara belum tersedia untuk audit ini.
+    </div>
+  </ng-container>
+</div> -->
+<div *ngIf="laporan">
+  <app-laporan-sementara-pdf [laporan]="laporan"></app-laporan-sementara-pdf>
+</div>

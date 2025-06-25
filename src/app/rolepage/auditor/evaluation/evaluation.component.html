@@ -1,0 +1,107 @@
+<div class="mb-3">
+  <label for="companySelect" class="form-label fw-bold">Pilih Perusahaan</label>
+  <select id="companySelect" class="form-select" [(ngModel)]="selectedCompany" (change)="onCompanyChange()">
+    <option value="">-- Pilih Perusahaan --</option>
+    <option *ngFor="let c of companies" [value]="c._id">{{ c.Nama }}</option>
+  </select>
+</div>
+
+<div *ngIf="isLoading" class="alert alert-info">Memuat data prequalifikasi...</div>
+
+<form *ngIf="selectedPrequalification">
+  <h5 class="mb-4">
+    Status: <span class="badge bg-secondary">{{ selectedPrequalification.Status }}</span>
+  </h5>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr class="table-light">
+          <th>Kriteria</th>
+          <th>Jawaban Vendor</th>
+          <th>File Bukti</th>
+          <th>Status Koreksi</th>
+          <!-- Judul kolom diubah untuk mencerminkan konten baru -->
+          <th>Catatan & Klasifikasi</th>
+          <th style="width: 150px;">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let j of selectedPrequalification.Jawaban; let i = index">
+          <td>{{ j.Kriteria.Deskripsi || j.Kriteria }}</td>
+          <td>
+            <p class="mb-1"><strong>Pilihan:</strong> <span class="badge bg-primary">{{ j.Pilihan }}</span></p>
+            <p class="small text-muted mb-0"><strong>Ket:</strong> {{ j.Keterangan || '-' }}</p>
+          </td>
+          <td>
+            <ng-container *ngIf="j.File_Bukti; else noFile">
+              <a [href]="getFileUrl(j.File_Bukti)" target="_blank" class="btn btn-sm btn-outline-info">
+                <i class="bi bi-eye"></i> Lihat File
+              </a>
+            </ng-container>
+            <ng-template #noFile>
+              <span class="text-muted small">Tidak ada</span>
+            </ng-template>
+          </td>
+          <!-- Kolom Status Koreksi -->
+          <td>
+            <ng-container *ngIf="editMode[i]; else showStatusKoreksi">
+              <select class="form-select form-select-sm" [(ngModel)]="editJawaban[i].statusKoreksi" name="statusKoreksi-{{i}}">
+                <option value="">-- Pilih Status --</option>
+                <option value="Diterima">Diterima</option>
+                <option value="Perlu Revisi">Perlu Revisi</option>
+                <option value="Ditolak">Ditolak</option>
+              </select>
+            </ng-container>
+            <ng-template #showStatusKoreksi>
+              <span class="badge" [ngClass]="{
+                'bg-success': j.statusKoreksi === 'Diterima',
+                'bg-warning': j.statusKoreksi === 'Perlu Revisi',
+                'bg-danger': j.statusKoreksi === 'Ditolak'
+              }">{{ j.statusKoreksi || 'Belum Dievaluasi' }}</span>
+            </ng-template>
+          </td>
+          <!-- Kolom Catatan & Klasifikasi BARU -->
+          <td>
+            <ng-container *ngIf="editMode[i]; else showCatatan">
+              <!-- <<< TAMBAHAN: Dropdown Klasifikasi hanya muncul jika statusnya adalah temuan -->
+              <div *ngIf="editJawaban[i].statusKoreksi && editJawaban[i].statusKoreksi !== 'Diterima'" class="mb-2">
+                <label class="form-label fw-bold small d-block">Klasifikasi Temuan</label>
+                <select class="form-select form-select-sm" [(ngModel)]="editJawaban[i].klasifikasiTemuan" name="klasifikasi-{{i}}">
+                  <option value="">-- Pilih Klasifikasi --</option>
+                  <option value="Major">Major</option>
+                  <option value="Minor">Minor</option>
+                  <option value="Observasi">Observasi</option>
+                </select>
+              </div>
+              <label class="form-label fw-bold small d-block">Catatan Koreksi</label>
+              <textarea class="form-control" [(ngModel)]="editJawaban[i].catatanKoreksi" name="catatanKoreksi-{{i}}" rows="2"></textarea>
+            </ng-container>
+            <ng-template #showCatatan>
+              <!-- <<< TAMBAHAN: Menampilkan klasifikasi yang sudah tersimpan -->
+              <div *ngIf="j.klasifikasiTemuan" class="mb-1">
+                <span class="badge bg-dark">{{ j.klasifikasiTemuan }}</span>
+              </div>
+              <p class="mb-0 small">{{ j.catatanKoreksi || '-' }}</p>
+            </ng-template>
+          </td>
+          <!-- Kolom Aksi -->
+          <td>
+            <ng-container *ngIf="!editMode[i]; else editAksi">
+              <button type="button" class="btn btn-glow btn-sm" (click)="startEdit(i, j)">
+                <i class="bi bi-pencil-square"></i> Edit
+              </button>
+            </ng-container>
+            <ng-template #editAksi>
+              <button type="button" class="btn btn-glow btn-sm" (click)="saveRow(i, j)">
+                <i class="bi bi-check-lg"></i> Simpan
+              </button>
+              <button type="button" class="btn btn-cancel btn-sm ms-1" (click)="cancelEdit(i)">
+                Batal
+              </button>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</form>

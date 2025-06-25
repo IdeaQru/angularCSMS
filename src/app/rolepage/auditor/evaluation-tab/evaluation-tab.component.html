@@ -1,0 +1,24 @@
+<div class="custom-tab-container">
+  <div class="custom-tabs">
+    <button
+      class="custom-tab"
+      [class.active]="activeTab === 'evaluasi'"
+      (click)="activeTab = 'evaluasi'"
+      type="button"
+    >
+      <i class="bi bi-clipboard-check"></i> Evaluasi
+    </button>
+    <button
+      class="custom-tab"
+      [class.active]="activeTab === 'laporan'"
+      (click)="activeTab = 'laporan'"
+      type="button"
+    >
+      <i class="bi bi-file-earmark-text"></i> Laporan Sementara
+    </button>
+  </div>
+  <div class="custom-tab-content">
+    <app-evaluation *ngIf="activeTab === 'evaluasi'"></app-evaluation>
+    <app-laporan-sementara2 *ngIf="activeTab === 'laporan'"></app-laporan-sementara2>
+  </div>
+</div>

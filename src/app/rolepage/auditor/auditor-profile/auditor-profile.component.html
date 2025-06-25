@@ -1,0 +1,51 @@
+<div class="container mt-4 shadow rounded bg-white auditor-profile-container">
+  <div class="header-container text-center p-4 mb-4 rounded shadow">
+    <i class="fas fa-user-tie me-2"></i>
+    <h3 class="d-inline-block mb-0">Profil Auditor</h3>
+    <div *ngIf="loading" class="spinner-border text-light ms-3" role="status"></div>
+  </div>
+
+  <!-- Jika sudah pernah submit, tampilkan data saja -->
+  <div *ngIf="isSubmitted && !loading">
+    <div class="card p-4 shadow-sm">
+      <h5 class="mb-3 text-success">Data Auditor Anda</h5>
+      <dl class="row">
+        <dt class="col-sm-4">Nama Auditor</dt>
+        <dd class="col-sm-8">{{ auditor.Nama }}</dd>
+        <dt class="col-sm-4">Jabatan</dt>
+        <dd class="col-sm-8">{{ auditor.Jabatan }}</dd>
+        <dt class="col-sm-4">Lembaga Audit</dt>
+        <dd class="col-sm-8">{{ auditor.Lembaga_Audit }}</dd>
+ 
+      
+      </dl>
+      <div class="alert alert-info mt-3">
+        Anda sudah pernah mengisi data auditor. Data hanya bisa dilihat.
+      </div>
+    </div>
+  </div>
+
+  <!-- Jika belum pernah submit, tampilkan form -->
+  <form *ngIf="!isSubmitted && !loading" (ngSubmit)="onSubmit()" autocomplete="off" class="px-3 px-md-5">
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Nama Auditor <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" [(ngModel)]="auditor.Nama" name="nama" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Jabatan</label>
+        <input type="text" class="form-control" [(ngModel)]="auditor.Jabatan" name="jabatan">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Lembaga Audit</label>
+        <input type="text" class="form-control" [(ngModel)]="auditor.Lembaga_Audit" name="lembagaAudit">
+      </div>
+
+    </div>
+    <div class="mt-4 text-center">
+      <button type="submit" class="btn btn-success px-5 py-2" [disabled]="loading">Simpan</button>
+    </div>
+  </form>
+</div>

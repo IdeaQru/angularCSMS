@@ -1,0 +1,195 @@
+/* Import font modern dari Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+
+.btn.btn-glow {
+  background: linear-gradient(90deg, #0ba766 80%, #ffea00 100%);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.05rem;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0ba76633;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.btn.btn-glow:hover {
+  background: linear-gradient(90deg, #ffea00 40%, #0ba766 100%);
+  color: #0ba766;
+  box-shadow: 0 0 10px #ffea00;
+}
+.btn.btn-outline-glow {
+  background: #fff;
+  color: #0ba766;
+  border: 2px solid #0ba766;
+  font-weight: 600;
+  border-radius: 7px;
+  font-size: 1.05rem;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+.btn.btn-outline-glow:hover {
+  background: #eaffea;
+  color: #0ba766;
+}
+/* Variabel warna untuk kemudahan kustomisasi */
+:host {
+  --primary-color: #0ba766; /* Hijau utama Anda */
+  --dark-text: #333333;
+  --light-text: #666666;
+  --border-color: #e0e0e0;
+  --header-bg: #f7f9fa;
+}
+
+/* Kontainer utama untuk semua halaman PDF */
+.pdf-container {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f0f2f5; /* Latar belakang abu-abu muda di luar halaman */
+  padding: 20px;
+}
+
+/* Men-style setiap halaman agar terlihat seperti kertas A4 */
+.pdf-page {
+  background: #ffffff;
+  width: 210mm;
+  min-height: 297mm; /* Setidaknya setinggi A4, bisa lebih jika konten panjang */
+  margin: 0 auto 20px auto;
+  padding: 20mm;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  color: var(--dark-text);
+  position: relative; /* Untuk positioning footer */
+}
+
+/* Header yang muncul di setiap halaman (kecuali cover) */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+}
+.page-header img {
+  height: 40px;
+}
+.page-header .report-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-align: right;
+}
+
+/* Footer dengan nomor halaman */
+.page-footer {
+  position: absolute;
+  bottom: 15mm;
+  left: 20mm;
+  right: 20mm;
+  text-align: center;
+  font-size: 12px;
+  color: var(--light-text);
+  border-top: 1px solid var(--border-color);
+  padding-top: 8px;
+}
+
+/* --- Gaya Halaman Sampul (Cover) --- */
+.cover-page-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 257mm; /* Tinggi A4 dikurangi padding atas/bawah */
+}
+.cover-page-content .logo {
+  height: 80px;
+  margin-bottom: 30px;
+}
+.cover-page-content .main-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0.5em 0;
+}
+.cover-page-content .company-name {
+  font-size: 1.5rem;
+  margin-bottom: 2em;
+}
+.cover-page-content .audit-info {
+  font-size: 1.1em;
+  color: var(--light-text);
+}
+.cover-page-content .audit-info b {
+  color: var(--dark-text);
+}
+
+/* --- Gaya Konten Umum --- */
+.card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 25px;
+  overflow: hidden; /* Agar border-radius bekerja dengan header */
+}
+.card-header {
+  background-color: var(--header-bg);
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+}
+.card-body {
+  padding: 20px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.card-body .info-item {
+  margin-bottom: 12px;
+}
+.card-body .info-item b {
+  display: inline-block;
+  width: 180px; /* Lebar label yang konsisten */
+  color: var(--dark-text);
+}
+
+/* Gaya tabel yang profesional */
+.professional-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.professional-table thead th {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  padding: 12px;
+  text-align: left;
+  font-weight: 500;
+}
+.professional-table tbody td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+.professional-table tbody tr:nth-child(even) {
+  background-color: var(--header-bg); /* Zebra striping */
+}
+.professional-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Tanda tangan */
+.signature-section {
+  margin-top: 50px;
+  text-align: right;
+}
+.signature-section .signature-line {
+  margin-top: 60px;
+  font-weight: 700;
+}
+
+/* Utility untuk page break */
+.page-break {
+  page-break-after: always;
+}

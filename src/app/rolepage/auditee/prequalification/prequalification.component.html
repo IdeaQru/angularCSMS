@@ -1,0 +1,130 @@
+<!-- Step 1: Pilih Auditee -->
+<div *ngIf="!selectedAuditee" class="pilih-perusahaan-form">
+  <h2 class="prequal-header">Pilih Auditee</h2>
+  <form #auditeeForm="ngForm">
+    <select [(ngModel)]="selectedAuditeeId" name="auditee" required class="select-perusahaan"
+      (ngModelChange)="onAuditeeSelected()">
+      <option value="" disabled selected>Pilih auditee...</option>
+      <option *ngFor="let a of auditeeList" [value]="a._id">
+        {{ a.ID_Perusahaan?.Nama }} - {{ a.ID_Auditor?.Nama }}
+      </option>
+    </select>
+  </form>
+</div>
+
+<!-- Step 2: Form Prequalification -->
+<div *ngIf="selectedAuditee">
+  <h2 class="prequal-header">
+    Form Prequalification Auditee<br>
+    <small style="font-size:1rem; color:#0ba766;">
+      Perusahaan: {{ selectedAuditee?.ID_Perusahaan?.Nama }}<br>
+      Auditor: {{ selectedAuditee?.ID_Auditor?.Nama }}<br>
+      Tanggal Audit: {{ selectedAuditee?.Tanggal_Audit }}<br>
+      Tingkat Audit: {{ selectedAuditee?.Tingkat_Audit }}<br>
+      Status Audit: {{ selectedAuditee?.Status_Audit }}
+    </small>
+  </h2>
+
+  <table class="prequal-table">
+    <thead>
+      <tr>
+        <th>Kode</th>
+        <th>Deskripsi</th>
+        <th>Pilihan Auditee</th>
+        <th>Keterangan</th>
+        <th>Bukti (Upload File)</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+
+    <!-- Loop per grup kode -->
+    <ng-container *ngFor="let group of groupedKriteria | keyvalue: sortGroup">
+      <tbody>
+        <tr class="group-header-row">
+          <td colspan="6" class="group-header">
+            <div class="kriteria-group-header" (click)="toggleGroup(group.key)">
+              <i class="fas"
+                [ngClass]="{'fa-chevron-down': !collapsedGroups[group.key], 'fa-chevron-right': collapsedGroups[group.key]}"></i>
+              Kode {{ group.key }}
+              <span class="group-toggle-text">{{ collapsedGroups[group.key] ? 'Tampilkan' : 'Sembunyikan' }}</span>
+            </div>
+          </td>
+        </tr>
+        <ng-container *ngIf="!collapsedGroups[group.key]">
+          <tr *ngFor="let k of group.value; let i = index">
+            <td>{{ k.Kode }}</td>
+            <td>
+              <span *ngIf="!showMore[k.Kode]">
+                {{ k.Deskripsi | slice:0:80 }}<span *ngIf="k.Deskripsi.length > 80">...</span>
+                <a *ngIf="k.Deskripsi.length > 80" class="show-more-link" (click)="toggleShowMore(k.Kode)">Show More</a>
+              </span>
+              <span *ngIf="showMore[k.Kode]">
+                {{ k.Deskripsi }}
+                <a class="show-more-link" (click)="toggleShowMore(k.Kode)">Show Less</a>
+              </span>
+            </td>
+            <td>
+              <ng-container *ngIf="jawabanTersimpan[k.Kode] && !editMode[k.Kode]; else inputRadio">
+                <span class="badge-awal">{{ jawabanTersimpan[k.Kode].Pilihan }}</span>
+              </ng-container>
+              <ng-template #inputRadio>
+                <div class="radio-group">
+                  <label *ngFor="let p of pilihanList">
+                    <input type="radio" [name]="'pilihan-'+k.Kode" [value]="p" [(ngModel)]="auditeeData[k.Kode].pilihan"
+                      required />
+                    {{ p }}
+                  </label>
+                </div>
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="jawabanTersimpan[k.Kode] && !editMode[k.Kode]; else inputKet">
+                <span>{{ jawabanTersimpan[k.Kode].Keterangan }}</span>
+              </ng-container>
+              <ng-template #inputKet>
+                <input type="text" [(ngModel)]="auditeeData[k.Kode].keterangan" [name]="'keterangan-'+k.Kode"
+                  placeholder="Keterangan (opsional)" />
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="jawabanTersimpan[k.Kode]?.File_Bukti && !editMode[k.Kode]; else inputFile">
+                <a [href]="getFileUrl(jawabanTersimpan[k.Kode].File_Bukti??'')" target="_blank">
+                  Lihat File
+                </a>
+              </ng-container>
+
+              <ng-template #inputFile>
+                <input type="file" (change)="onFileSelected($event, k.Kode)" />
+                <span *ngIf="files[k.Kode]">✔️ {{ files[k.Kode]?.name }}</span>
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="jawabanTersimpan[k.Kode] && !editMode[k.Kode]; else aksiSimpan">
+                <button class="btn-glow" (click)="editJawaban(k.Kode)">Edit</button>
+              </ng-container>
+              <ng-template #aksiSimpan>
+                <button class="btn-glow" (click)="simpanJawaban(k)"
+                  [disabled]="!auditeeData[k.Kode].pilihan">Simpan</button>
+                <button class="btn-cancel" (click)="cancelEdit(k.Kode)">Batal</button>
+              </ng-template>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </ng-container>
+  </table>
+
+
+
+  <!-- Floating Progress Bar -->
+  <div class="progress-bar-floating">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fg" [style.width.%]="progressPercent">
+        {{ progressPercent }}%
+      </div>
+    </div>
+    <div class="progress-bar-label">
+      {{ progressPercent }}% kriteria telah diisi
+    </div>
+  </div>
+</div>

@@ -1,0 +1,234 @@
+<div class="container mt-4 shadow rounded bg-white">
+  <!-- Tab Header -->
+  <div class="row">
+    <div class="col-6 text-center p-3" [class.active-tab]="activeTab === 'perusahaan'" (click)="setTab('perusahaan')"
+      style="cursor:pointer; border-bottom: 3px solid #0ba766;">
+      <i class="fas fa-building me-2"></i>
+      <span style="font-weight:bold;">Data Perusahaan</span>
+    </div>
+    <div class="col-6 text-center p-3" [class.active-tab]="activeTab === 'audit'" (click)="setTab('audit')"
+      style="cursor:pointer; border-bottom: 3px solid #0ba766;">
+      <i class="fas fa-file-alt me-2"></i>
+      <span style="font-weight:bold;">Data Audit</span>
+    </div>
+  </div>
+
+  <!-- === Tab Perusahaan === -->
+  <div *ngIf="activeTab === 'perusahaan'" class="p-4">
+    <!-- Tombol tambah perusahaan -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0">Daftar Perusahaan</h5>
+      <button class="btn btn-success" (click)="showForm = true" *ngIf="!showForm">
+        + Tambah Perusahaan
+      </button>
+    </div>
+
+    <!-- Form tambah perusahaan -->
+    <form *ngIf="showForm" (ngSubmit)="onSubmitPerusahaan()" class="p-4 mb-4 shadow rounded bg-light">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nama Perusahaan</label>
+          <input type="text" class="form-control" [(ngModel)]="perusahaan.Nama" name="Nama" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Alamat</label>
+          <input type="text" class="form-control" [(ngModel)]="perusahaan.Alamat" name="Alamat">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Jenis Usaha</label>
+          <select class="form-control" [(ngModel)]="perusahaan.Jenis_Usaha" name="Jenis_Usaha" required>
+            <option value="" disabled selected>Pilih Jenis Usaha</option>
+            <option value="Perdagangan">Perdagangan</option>
+            <option value="Jasa">Jasa</option>
+            <option value="Industri">Industri</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Tanggal Audit</label>
+          <input type="date" class="form-control" [(ngModel)]="perusahaan.Tanggal_Audit" name="Tanggal_Audit">
+        </div>
+      </div>
+      <div class="mt-4 text-center">
+        <button type="submit" class="btn btn-success px-5 py-2">Simpan</button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="showForm = false">Batal</button>
+      </div>
+    </form>
+
+    <!-- Pencarian -->
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Cari perusahaan..." [(ngModel)]="searchTerm"
+        (ngModelChange)="filterPerusahaan()">
+    </div>
+
+    <!-- Tabel perusahaan -->
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Nama Perusahaan</th>
+          <th>Alamat</th>
+          <th>Jenis Usaha</th>
+          <th>Tanggal Audit</th>
+          <th style="width: 120px;">Aksi</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of pagedPerusahaan">
+          <td>{{ p.Nama }}</td>
+          <td>{{ p.Alamat }}</td>
+          <td>{{ p.Jenis_Usaha }}</td>
+          <td>{{ p.Tanggal_Audit | date:'yyyy-MM-dd' }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" (click)="editPerusahaan(p)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deletePerusahaan(p)">Hapus</button>
+          </td>
+        </tr>
+        <tr *ngIf="pagedPerusahaan.length === 0">
+          <td colspan="4" class="text-center">Tidak ada data perusahaan.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav *ngIf="totalPages > 1">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="goToPage(currentPage - 1)" href="#">«</a>
+        </li>
+        <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === i + 1">
+          <a class="page-link" (click)="goToPage(i + 1)" href="#">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="goToPage(currentPage + 1)" href="#">»</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- === Tab Audit === -->
+  <div *ngIf="activeTab === 'audit'" class="p-4">
+    <!-- Tombol tambah audit -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0">Daftar Audit/Auditee</h5>
+      <button class="btn btn-success" (click)="showAuditForm = !showAuditForm">
+        {{ showAuditForm ? 'Tutup Form' : '+ Tambah Audit' }}
+      </button>
+    </div>
+
+    <!-- Form tambah audit -->
+    <div class="card shadow-sm mb-4" *ngIf="showAuditForm">
+      <div class="card-body">
+        <h5 class="mb-3"><i class="fas fa-file-alt me-2"></i>Input Data Audit</h5>
+        <form (ngSubmit)="onSubmitAudit()" #auditForm="ngForm" autocomplete="off">
+          <div *ngIf="successAudit" class="alert alert-success">{{ successAudit }}</div>
+          <div *ngIf="errorAudit" class="alert alert-danger">{{ errorAudit }}</div>
+          <div class="row g-3">
+            <!-- Dropdown Perusahaan -->
+            <div class="col-md-6">
+              <label class="form-label">Perusahaan <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="audit.ID_Perusahaan" name="ID_Perusahaan" required>
+                <option value="" disabled selected>-- Pilih Perusahaan --</option>
+                <option *ngFor="let p of perusahaanList" [value]="p._id">{{ p.Nama }}</option>
+              </select>
+            </div>
+            <!-- Tanggal Audit -->
+            <div class="col-md-6">
+              <label class="form-label">Tanggal Audit <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" [(ngModel)]="audit.Tanggal_Audit" name="Tanggal_Audit" required>
+            </div>
+            <!-- Tingkat Audit -->
+            <div class="col-md-6">
+              <label class="form-label">Tingkat Audit <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="audit.Tingkat_Audit" name="Tingkat_Audit" required>
+                <option value="" disabled selected>-- Pilih Tingkat Audit --</option>
+                <option *ngFor="let t of tingkatAuditOptions" [value]="t.value">{{ t.label }}</option>
+              </select>
+            </div>
+            <!-- Status Audit -->
+            <div class="col-md-6">
+              <label class="form-label">Status Audit <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="audit.Status_Audit" name="Status_Audit" required>
+                <option value="" disabled selected>-- Pilih Status Audit --</option>
+                <option *ngFor="let s of statusAuditOptions" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </div>
+            <!-- Dropdown Auditor -->
+            <div class="col-md-6">
+              <label class="form-label">Auditor <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="audit.ID_Auditor" name="ID_Auditor" required>
+                <option value="" disabled selected>-- Pilih Auditor --</option>
+                <option *ngFor="let auditor of auditors" [value]="auditor._id">
+                  {{ auditor.nama || auditor.Nama || auditor.username }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-4 text-center">
+            <button type="submit" class="btn btn-success px-5 py-2"
+              [disabled]="auditForm.invalid || loadingAudit">Simpan</button>
+            <button type="button" class="btn btn-secondary ms-2" (click)="resetAuditForm()"
+              [disabled]="loadingAudit">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Pencarian Auditee -->
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Cari audit/auditee..." [(ngModel)]="searchTermAuditee"
+        (ngModelChange)="filterAuditee()">
+    </div>
+
+    <!-- Tabel Auditee -->
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Nama Perusahaan</th>
+          <th>Tanggal Audit</th>
+          <th>Tingkat Audit</th>
+          <th>Status Audit</th>
+          <th>Auditor</th>
+          <th style="width: 120px;">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of pagedAuditee">
+          <td>{{ a.ID_Perusahaan?.Nama }}</td>
+          <td>{{ a.Tanggal_Audit | date:'yyyy-MM-dd' }}</td>
+          <td>{{ a.Tingkat_Audit }}</td>
+          <td>{{ a.Status_Audit }}</td>
+          <td>{{ a.ID_Auditor?.nama || a.ID_Auditor?.Nama || '-' }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" (click)="editAuditee(a)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteAuditee(a._id)">Hapus</button>
+          </td>
+        </tr>
+        <tr *ngIf="pagedAuditee.length === 0">
+          <td colspan="5" class="text-center">Tidak ada data audit/auditee.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination Auditee -->
+    <nav *ngIf="totalPagesAuditee > 1">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPageAuditee === 1">
+          <a class="page-link" (click)="goToPageAuditee(currentPageAuditee - 1)" href="#">«</a>
+        </li>
+        <li class="page-item" *ngFor="let page of [].constructor(totalPagesAuditee); let i = index"
+          [class.active]="currentPageAuditee === i + 1">
+          <a class="page-link" (click)="goToPageAuditee(i + 1)" href="#">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPageAuditee === totalPagesAuditee">
+          <a class="page-link" (click)="goToPageAuditee(currentPageAuditee + 1)" href="#">»</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+
+
+</div>

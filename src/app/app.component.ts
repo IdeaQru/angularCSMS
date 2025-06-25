@@ -1,4 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,8 +8,23 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   isMinimized: boolean = false; // Status sidebar
+  isAuthPage: boolean = false;  // Status untuk halaman login/register
 
-  constructor(private renderer: Renderer2) {}
+  trails = Array(20).fill(0); // Membuat array untuk 20 bagian ekor agar lebih halus
+  private positions: { x: number; y: number }[] = Array(20).fill({ x: 0, y: 0 }); // Posisi ekor
+  private hideTimeout: any;
+
+  constructor(private renderer: Renderer2, private router: Router) {
+    // Deteksi perubahan route untuk cek apakah di halaman login/register
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const url = event.urlAfterRedirects;
+        this.isAuthPage =
+          url.startsWith('/auth/login') ||
+          url.startsWith('/auth/register');
+      }
+    });
+  }
 
   // Fungsi untuk toggle sidebar
   toggleSidebar(): void {
@@ -18,11 +34,6 @@ export class AppComponent implements OnInit {
     });
     window.dispatchEvent(sidebarToggleEvent);
   }
-  trails = Array(20).fill(0); // Membuat array untuk 20 bagian ekor agar lebih halus
-
-  private positions: { x: number; y: number }[] = Array(20).fill({ x: 0, y: 0 }); // Posisi ekor
-  private hideTimeout: any;
-
 
   ngOnInit(): void {
     document.addEventListener('mousemove', (event: MouseEvent) => {
@@ -42,7 +53,7 @@ export class AppComponent implements OnInit {
       // Jika mouse bergerak, tampilkan kembali ekor
       this.showTrails();
 
-      // Reset timeout untuk menyembunyikan ekor setelah 2 detik
+      // Reset timeout untuk menyembunyikan ekor setelah 30ms
       clearTimeout(this.hideTimeout);
       this.hideTimeout = setTimeout(() => {
         this.hideTrails();

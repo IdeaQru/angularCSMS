@@ -1,18 +1,19 @@
+<!-- Cursor Trails -->
 <div *ngFor="let trail of trails" class="cursor-trail"></div>
-<div class="dashboard-layout">
-  <!-- Sidebar -->
-  <app-sidebar (toggle)="toggleSidebar()"></app-sidebar>
 
-  <!-- Main Content -->
-  <div [class.minimized]="isMinimized" class="content-area">
-    <!-- Navbar -->
-    <app-navbar></app-navbar>
-
-    <!-- Konten Dinamis Menggunakan Router Outlet -->
-    <router-outlet></router-outlet>
-
-    <!-- Footer -->
-    <app-footer></app-footer>
-  </div>
+<!-- Jika di halaman login/register, tampilkan hanya router-outlet -->
+<div *ngIf="isAuthPage; else mainLayout">
+  <router-outlet></router-outlet>
 </div>
 
+<!-- Layout utama dashboard -->
+<ng-template #mainLayout>
+  <div class="dashboard-layout">
+    <app-sidebar (toggle)="toggleSidebar()"></app-sidebar>
+    <div [class.minimized]="isMinimized" class="content-area">
+      <app-navbar></app-navbar>
+      <router-outlet></router-outlet>
+      <app-footer></app-footer>
+    </div>
+  </div>
+</ng-template>

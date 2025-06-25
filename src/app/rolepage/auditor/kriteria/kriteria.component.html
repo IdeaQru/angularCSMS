@@ -1,0 +1,59 @@
+  <button class="btn-glow" (click)="showForm = !showForm">
+    <i class="fas fa-plus-circle"></i> Tambah Kriteria
+  </button>
+
+  <!-- Form Input Kriteria -->
+  <form *ngIf="showForm" (ngSubmit)="tambahKriteria()" class="kriteria-form">
+    <input [(ngModel)]="form.Kode" name="Kode" placeholder="Kode" required />
+    <input [(ngModel)]="form.Deskripsi" name="Deskripsi" placeholder="Deskripsi" required />
+    <input [(ngModel)]="form.Kategori" name="Kategori" placeholder="Kategori" required />
+    <input [(ngModel)]="form.Referensi" name="Referensi" placeholder="Referensi" />
+    <select [(ngModel)]="form.Tingkat" name="Tingkat" required>
+      <option value="Awal">Awal</option>
+      <option value="Transisi">Transisi</option>
+      <option value="Lanjutan">Lanjutan</option>
+    </select>
+    <button type="submit" class="btn-glow">{{ editId === null ? 'Tambah' : 'Update' }}</button>
+    <button type="button" *ngIf="editId !== null" (click)="batalEdit()" class="btn-cancel">Batal</button>
+  </form>
+
+  <div class="kriteria-group" *ngFor="let group of groupedKriteria | keyvalue: sortGroup">
+    <div class="kriteria-group-header" (click)="toggleGroup(group.key)">
+      <i class="fas" [ngClass]="{'fa-chevron-down': !collapsedGroups[group.key], 'fa-chevron-right': collapsedGroups[group.key]}"></i>
+      Kode {{ group.key }}
+      <span class="bjirr">{{ collapsedGroups[group.key] ? 'Tampilkan' : 'Sembunyikan' }}</span>
+    </div>
+    <div [hidden]="collapsedGroups[group.key]">
+      <table class="kriteria-table">
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Deskripsi</th>
+            <th>Kategori</th>
+            <th>Referensi</th>
+            <th>Tingkat</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let k of group.value; let i = index">
+            <td>{{ k.Kode }}</td>
+            <td>{{ k.Deskripsi }}</td>
+            <td>{{ k.Kategori }}</td>
+            <td>{{ k.Referensi }}</td>
+            <td>
+              <span [ngClass]="{
+                'badge-awal': k.Tingkat === 'Awal',
+                'badge-transisi': k.Tingkat === 'Transisi',
+                'badge-lanjutan': k.Tingkat === 'Lanjutan'
+              }">{{ k.Tingkat }}</span>
+            </td>
+            <td>
+              <button class="btn-edit" (click)="editKriteria(group.key, i)"><i class="fas fa-edit"></i></button>
+              <button class="btn-delete" (click)="hapusKriteria(group.key, i)"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
